@@ -34,6 +34,7 @@ namespace StudentMVCApp.DTOs
         public string PhoneNumber { get; set; }
 
         public int DepartmentId { get; set; }
+
     }
 
     public class UpdateStudentRequestModel

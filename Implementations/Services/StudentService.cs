@@ -46,7 +46,7 @@ namespace StudentMVCApp.Implementations.Services
                 Id = student.Id,
                 FirstName = student.FirstName,
                 LastName = student.LastName,
-                DepartmentName = student.Department.Name,
+                //DepartmentName = student.Department.Name,
                 Email = student.Email,
                 PhoneNumber = student.PhoneNumber
 
