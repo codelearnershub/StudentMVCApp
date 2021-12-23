@@ -13,10 +13,12 @@ namespace StudentMVCApp.Implementations.Services
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
+        private readonly ICourseRepository _courseRepository; 
 
-        public StudentService(IStudentRepository studentRepository)
+        public StudentService(IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
             _studentRepository = studentRepository;
+            _courseRepository = courseRepository;
         }
         public bool AddStudent(CreateStudentRequestModel model)
         {
@@ -28,6 +30,20 @@ namespace StudentMVCApp.Implementations.Services
                 PhoneNumber = model.PhoneNumber,
                 DepartmentId = model.DepartmentId
             };
+
+            var courses = _courseRepository.GetSelectedCourses(model.Courses);
+            foreach(var course in courses)
+            {
+                var studentCourse = new StudentCourse
+                {
+                    CourseId = course.Id,
+                    Course = course,
+                    Student = student,
+                    StudentId = student.Id
+                };
+                student.StudentCourses.Add(studentCourse);
+            }
+
             _studentRepository.Create(student);
             return true;
         }

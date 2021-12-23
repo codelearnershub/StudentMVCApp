@@ -20,6 +20,8 @@ namespace StudentMVCApp.DTOs
         public int DepartmentId { get; set; }
 
         public string DepartmentName { get; set; }
+
+        public List<CourseDto> Courses { get; set; } = new List<CourseDto>();
     }
 
 
@@ -34,6 +36,8 @@ namespace StudentMVCApp.DTOs
         public string PhoneNumber { get; set; }
 
         public int DepartmentId { get; set; }
+
+        public IList<int> Courses { get; set; } = new List<int>();
 
     }
 

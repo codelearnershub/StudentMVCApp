@@ -37,7 +37,10 @@ namespace StudentMVCApp.Implementations.Repositories
 
         public List<Student> GetAll()
         {
-            return _context.Students.Include(s => s.Department).ToList();
+            return _context.Students.Include(s => s.Department)
+                .Include(s => s.StudentCourses)
+                .ThenInclude(st => st.Course)
+                .ToList();
         }
 
         public Student Update(Student student)

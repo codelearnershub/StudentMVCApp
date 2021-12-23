@@ -13,11 +13,13 @@ namespace StudentMVCApp.Controllers
     {
         private readonly IStudentService _studentService;
         private readonly IDepartmentService _departmentService;
+        private readonly ICourseService _courseService;
 
-        public StudentController(IStudentService studentService, IDepartmentService departmentService)
+        public StudentController(IStudentService studentService, IDepartmentService departmentService, ICourseService courseService)
         {
             _studentService = studentService;
             _departmentService = departmentService;
+            _courseService = courseService;
         }
         public IActionResult Index()
         {
@@ -29,6 +31,10 @@ namespace StudentMVCApp.Controllers
         {
             var departments = _departmentService.GetDepartments();
             ViewData["Departments"] = new SelectList(departments, "Id", "Name");
+
+            var courses = _courseService.GetCourses();
+            ViewData["Departments"] = new SelectList(courses, "Id", "Name");
+
             return View();
         }
 

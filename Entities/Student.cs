@@ -20,5 +20,9 @@ namespace StudentMVCApp.Entities
         public int DepartmentId { get; set; }
 
         public Department Department { get; set; }
+
+        public string StudentPhoto { get; set; }
+
+        public ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
     }
 }
