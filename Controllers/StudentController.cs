@@ -33,7 +33,7 @@ namespace StudentMVCApp.Controllers
             ViewData["Departments"] = new SelectList(departments, "Id", "Name");
 
             var courses = _courseService.GetCourses();
-            ViewData["Departments"] = new SelectList(courses, "Id", "Name");
+            ViewData["Courses"] = new SelectList(courses, "Id", "Name");
 
             return View();
         }

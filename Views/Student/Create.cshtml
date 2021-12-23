@@ -40,12 +40,19 @@
                     </div>
                     <div class="form-row">
                         <div class="col-md-6" style="margin-top: 20px; font-size: larger; font-weight: bold; color: darkcyan">
-                            <label  class="control-label">Department</label>
+                            <label class="control-label">Department</label>
                             <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.Departments" required>
                                 <option value="">--Select Department--</option>
                             </select>
                         </div>
-                       
+
+                        <div class="col-md-6" style="margin-top: 20px; font-size: larger; font-weight: bold; color: darkcyan">
+                            <label class="control-label">Courses</label>
+                            <select asp-for="Courses" class="form-control" asp-items="ViewBag.Courses" multiple required>
+                                <option value="">--Select Courses--</option>
+                            </select>
+                        </div>
+
                     </div>
                     <div class="form-group ">
                         <input href="#myModal" type="submit" value="Submit" class="btn btn-success trigger-btn col-sm-12" data-toggle="modal" />
