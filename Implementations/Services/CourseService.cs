@@ -35,17 +35,33 @@ namespace StudentMVCApp.Implementations.Services
 
         public CourseDto GetCourse(int id)
         {
-            throw new NotImplementedException();
+            var course = _courseRepository.Get(id);
+            return new CourseDto
+            {
+                Id = course.Id,
+                Name = course.Name,
+                
+
+            };
         }
 
         public IList<CourseDto> GetCourses()
         {
-            throw new NotImplementedException();
+            return _courseRepository.GetAll().Select(n => new CourseDto
+            {
+                Id = n.Id,
+                Name = n.Name,
+                
+            }).ToList();
         }
 
         public bool UpdateCourse(int id, UpdateCourseRequestModel model)
         {
-            throw new NotImplementedException();
+            var course = _courseRepository.Get(id);
+            course.Name = model.Name;
+            
+            _courseRepository.Update(course);
+            return true;
         }
     }
 }
