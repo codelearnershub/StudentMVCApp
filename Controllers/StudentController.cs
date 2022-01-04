@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StudentMVCApp.DTOs;
 using StudentMVCApp.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,12 +17,14 @@ namespace StudentMVCApp.Controllers
         private readonly IStudentService _studentService;
         private readonly IDepartmentService _departmentService;
         private readonly ICourseService _courseService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentController(IStudentService studentService, IDepartmentService departmentService, ICourseService courseService)
+        public StudentController(IStudentService studentService, IDepartmentService departmentService, ICourseService courseService, IWebHostEnvironment webHostEnvironment)
         {
             _studentService = studentService;
             _departmentService = departmentService;
             _courseService = courseService;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -39,8 +44,19 @@ namespace StudentMVCApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateStudentRequestModel model)
+        public IActionResult Create(CreateStudentRequestModel model, IFormFile studentPhoto)
         {
+            string studentPhotoPath = Path.Combine(_webHostEnvironment.WebRootPath, "studentPhotos");
+            Directory.CreateDirectory(studentPhotoPath);
+            string contentType = studentPhoto.ContentType.Split('/')[1];
+            string studentImage = $"STD{Guid.NewGuid()}.{contentType}";
+            string fullPath = Path.Combine(studentPhotoPath, studentImage);
+            using (var fileStream = new FileStream(fullPath, FileMode.Create))
+            {
+                studentPhoto.CopyTo(fileStream);
+            }
+            model.StudentPhoto = studentImage;
+
             _studentService.AddStudent(model);
             return RedirectToAction("Index");
         }

@@ -32,7 +32,7 @@ namespace StudentMVCApp.Implementations.Repositories
 
         public Student Get(int id)
         {
-            return _context.Students.Find(id);
+            return _context.Students.Include(s => s.StudentCourses).ThenInclude(st => st.Course).SingleOrDefault(s => s.Id == id);
         }
 
         public List<Student> GetAll()

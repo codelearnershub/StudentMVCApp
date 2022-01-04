@@ -1,10 +1,12 @@
-﻿using StudentMVCApp.Context;
+﻿using Microsoft.AspNetCore.Hosting;
+using StudentMVCApp.Context;
 using StudentMVCApp.DTOs;
 using StudentMVCApp.Entities;
 using StudentMVCApp.Interfaces.Repositories;
 using StudentMVCApp.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,22 +15,26 @@ namespace StudentMVCApp.Implementations.Services
     public class StudentService : IStudentService
     {
         private readonly IStudentRepository _studentRepository;
-        private readonly ICourseRepository _courseRepository; 
+        private readonly ICourseRepository _courseRepository;
+        
 
         public StudentService(IStudentRepository studentRepository, ICourseRepository courseRepository)
         {
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
+            
         }
         public bool AddStudent(CreateStudentRequestModel model)
         {
+           
             var student = new Student
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                DepartmentId = model.DepartmentId
+                DepartmentId = model.DepartmentId,
+                StudentPhoto = model.StudentPhoto
             };
 
             var courses = _courseRepository.GetSelectedCourses(model.Courses);
@@ -62,9 +68,15 @@ namespace StudentMVCApp.Implementations.Services
                 Id = student.Id,
                 FirstName = student.FirstName,
                 LastName = student.LastName,
-                //DepartmentName = student.Department.Name,
                 Email = student.Email,
-                PhoneNumber = student.PhoneNumber
+                PhoneNumber = student.PhoneNumber,
+                StudentPhoto = student.StudentPhoto,
+                Courses = student.StudentCourses.Select(c => new CourseDto
+                {
+                    Id = c.CourseId,
+                    Name = c.Course.Name,
+                   
+                }).ToList()
 
             };
         }
