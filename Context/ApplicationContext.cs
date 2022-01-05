@@ -27,8 +27,8 @@ namespace StudentMVCApp.Context
                  .WithOne(d => d.Student)
                  .HasForeignKey(d => d.StudentId)
                  .OnDelete(DeleteBehavior.Restrict);*/
-            modelBuilder.ApplyConfiguration(new StudentEntityTypeConfiguration());
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+           /* modelBuilder.ApplyConfiguration(new StudentEntityTypeConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());*/
         }
 
         public DbSet<Pythons> Pythons { get; set; }

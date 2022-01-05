@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -32,6 +33,7 @@ namespace StudentMVCApp.Controllers
             return View(students);
         }
 
+       
         public IActionResult Create()
         {
             var departments = _departmentService.GetDepartments();
@@ -104,5 +106,56 @@ namespace StudentMVCApp.Controllers
             _studentService.DeleteStudent(id);
             return RedirectToAction("Index");
         }
+
+        public IActionResult Profile()
+        {
+            return View();
+        }
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(LoginRequestModel model)
+        {
+            var student = _studentService.Login(model);
+            if(student != null)
+            {
+                HttpContext.Session.SetString( "Id", student.Id.ToString());
+                HttpContext.Session.SetString("email", student.Email);
+                HttpContext.Session.SetString("firstName", student.FirstName);
+                HttpContext.Session.SetString("lastName", student.LastName);
+                HttpContext.Session.SetString("photo", student.StudentPhoto);
+                var i = 1;
+                foreach (var course in student.Courses)
+                {
+                    HttpContext.Session.SetString($"course{i}", course.Name);
+                    i++;
+                }
+                HttpContext.Session.SetString("numberOfCourses", student.Courses.Count.ToString());
+                HttpContext.Session.SetString("role", "Student");
+                HttpContext.Session.CommitAsync();
+
+                return RedirectToAction("Profile");
+            }
+            
+            else
+            {
+                ViewBag.error = "Invalid username or password";
+                return View();
+            }
+
+        }
+
+  
+    
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return View("Login");
+        }
+
     }
 }

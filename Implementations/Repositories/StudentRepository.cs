@@ -35,6 +35,11 @@ namespace StudentMVCApp.Implementations.Repositories
             return _context.Students.Include(s => s.StudentCourses).ThenInclude(st => st.Course).SingleOrDefault(s => s.Id == id);
         }
 
+        public Student GetByEmail(string email)
+        {
+            return _context.Students.Include(s => s.StudentCourses).ThenInclude(st => st.Course).SingleOrDefault(s => s.Email == email);
+        }
+
         public List<Student> GetAll()
         {
             return _context.Students.Include(s => s.Department)

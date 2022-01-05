@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StudentMVCApp.DTOs;
 using StudentMVCApp.Interfaces.Services;
 using System;
@@ -16,6 +17,8 @@ namespace StudentMVCApp.Controllers
         {
             _departmentService = departmentService;
         }
+
+
         public IActionResult Index()
         {
             var departments = _departmentService.GetDepartments();

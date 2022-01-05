@@ -13,5 +13,6 @@ namespace StudentMVCApp.Interfaces.Repositories
         Student Get(int id);
         List<Student> GetAll();
         void Delete(Student student);
+        Student GetByEmail(string email);
     }
 }

@@ -46,6 +46,8 @@ namespace StudentMVCApp.DTOs
 
         public string Email { get; set; }
 
+        public string Password { get; set; }
+
         [DisplayName("Student's Phone Number")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "")]
         public string PhoneNumber { get; set; }
@@ -63,5 +65,12 @@ namespace StudentMVCApp.DTOs
         public string Email { get; set; }
 
         public string PhoneNumber { get; set; }
+    }
+
+    public class LoginRequestModel
+    {
+        public string Email { get; set; }
+
+        public string Password { get; set; }
     }
 }

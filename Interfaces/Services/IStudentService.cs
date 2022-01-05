@@ -15,5 +15,7 @@ namespace StudentMVCApp.Interfaces.Services
         IList<StudentDto> GetStudents();
 
         void DeleteStudent(int id);
+
+        StudentDto Login(LoginRequestModel model);
     }
 }

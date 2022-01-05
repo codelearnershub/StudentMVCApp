@@ -27,6 +27,8 @@ namespace StudentMVCApp.Entities
 
         public string StudentPhoto { get; set; }
 
+        public string Password { get; set; }
+
         public ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
     }
 }

@@ -34,7 +34,8 @@ namespace StudentMVCApp.Implementations.Services
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 DepartmentId = model.DepartmentId,
-                StudentPhoto = model.StudentPhoto
+                StudentPhoto = model.StudentPhoto,
+                Password = model.Password 
             };
 
             var courses = _courseRepository.GetSelectedCourses(model.Courses);
@@ -92,6 +93,34 @@ namespace StudentMVCApp.Implementations.Services
                 Email = d.Email,
                 PhoneNumber = d.PhoneNumber
             }).ToList();
+        }
+
+        public StudentDto Login(LoginRequestModel model)
+        {
+            var student = _studentRepository.GetByEmail(model.Email);
+            if(student == null || student.Password != model.Password)
+            {
+                return null;
+            }
+            else
+            {
+                return new StudentDto
+                {
+                    Id = student.Id,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    Email = student.Email,
+                    PhoneNumber = student.PhoneNumber,
+                    StudentPhoto = student.StudentPhoto,
+                    Courses = student.StudentCourses.Select(c => new CourseDto
+                    {
+                        Id = c.CourseId,
+                        Name = c.Course.Name,
+
+                    }).ToList()
+
+                };
+            }
         }
 
         public bool UpdateStudent(int id, UpdateStudentRequestModel model)
