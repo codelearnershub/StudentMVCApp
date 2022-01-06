@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace StudentMVCApp.Controllers
@@ -116,30 +119,70 @@ namespace StudentMVCApp.Controllers
             return View();
         }
 
+        /*  [HttpPost]
+          public IActionResult Login(LoginRequestModel model)
+          {
+              var student = _studentService.Login(model);
+              if(student != null)
+              {
+                  HttpContext.Session.SetString( "Id", student.Id.ToString());
+                  HttpContext.Session.SetString("email", student.Email);
+                  HttpContext.Session.SetString("firstName", student.FirstName);
+                  HttpContext.Session.SetString("lastName", student.LastName);
+                  HttpContext.Session.SetString("photo", student.StudentPhoto);
+                  var i = 1;
+                  foreach (var course in student.Courses)
+                  {
+                      HttpContext.Session.SetString($"course{i}", course.Name);
+                      i++;
+                  }
+                  HttpContext.Session.SetString("numberOfCourses", student.Courses.Count.ToString());
+                  HttpContext.Session.SetString("role", "Student");
+                  HttpContext.Session.CommitAsync();
+
+                  return RedirectToAction("Profile");
+              }
+
+              else
+              {
+                  ViewBag.error = "Invalid username or password";
+                  return View();
+              }
+
+          }
+
+
+
+
+          public IActionResult Logout()
+          {
+              HttpContext.Session.Clear();
+              return View("Login");
+          }*/
+
         [HttpPost]
         public IActionResult Login(LoginRequestModel model)
         {
             var student = _studentService.Login(model);
-            if(student != null)
+            if (student != null)
             {
-                HttpContext.Session.SetString( "Id", student.Id.ToString());
-                HttpContext.Session.SetString("email", student.Email);
-                HttpContext.Session.SetString("firstName", student.FirstName);
-                HttpContext.Session.SetString("lastName", student.LastName);
-                HttpContext.Session.SetString("photo", student.StudentPhoto);
-                var i = 1;
-                foreach (var course in student.Courses)
-                {
-                    HttpContext.Session.SetString($"course{i}", course.Name);
-                    i++;
-                }
-                HttpContext.Session.SetString("numberOfCourses", student.Courses.Count.ToString());
-                HttpContext.Session.SetString("role", "Student");
-                HttpContext.Session.CommitAsync();
 
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, student.FirstName),
+                    new Claim(ClaimTypes.GivenName, $"{student.FirstName} {student.LastName}"),
+                    new Claim(ClaimTypes.NameIdentifier, student.Id.ToString()),
+                    new Claim(ClaimTypes.Email, student.Email),
+                    new Claim(ClaimTypes.Role, "Student"),
+                    new Claim("photo", student.StudentPhoto),
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authenticationProperties = new AuthenticationProperties();
+                var principal = new ClaimsPrincipal(claimsIdentity);
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authenticationProperties);
                 return RedirectToAction("Profile");
             }
-            
+
             else
             {
                 ViewBag.error = "Invalid username or password";
@@ -148,13 +191,13 @@ namespace StudentMVCApp.Controllers
 
         }
 
-  
-    
+
+
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear();
-            return View("Login");
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
 
     }

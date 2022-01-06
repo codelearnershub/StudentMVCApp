@@ -39,19 +39,20 @@
                 <div class="collapse navbar-collapse mr-3 " id="navbarNav">
                     <ul class="navbar-nav">
 
-                        @if (Context.Session.GetString("email") != null)
+                        @if (User != null && User.Identity.IsAuthenticated)
+
                         {
 
-                        <li class="nav-item active mr-3 float-right">
-                            <a class="nav-link text-success" href="#">@Context.Session.GetString("firstName")</a>
-                        </li>
-                        <li class="nav-item mr-3 float-right">
-                            <a class="nav-link text-success  mr-3" asp-area="" asp-controller="Student" asp-action="Logout"><i class="fas fa-user"></i> Logout</a>
-                        </li>
+                            <li class="nav-item active mr-3 float-right">
+                                <a class="nav-link text-success" href="#">@Context.User.Identity.Name</a>
+                            </li>
+                            <li class="nav-item mr-3 float-right">
+                                <a class="nav-link text-success  mr-3" asp-area="" asp-controller="Student" asp-action="Logout"><i class="fas fa-user"></i> Logout</a>
+                            </li>
                         }
                         else
                         {
-                        <a class="nav-link text-success  mr-3" asp-area="" asp-controller="Student" asp-action="Login"><i class="fas fa-user"></i>Login</a>
+                            <a class="nav-link text-success  mr-3" asp-area="" asp-controller="Student" asp-action="Login"><i class="fas fa-user"></i>Login</a>
                         }
 </div>
             </div>

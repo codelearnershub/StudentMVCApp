@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,8 +39,14 @@ namespace StudentMVCApp
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ICourseRepository, CourseRepository>();
-            services.AddSession();
-            services.AddAuthentication();
+            //services.AddSession();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(config =>
+                {
+                    config.LoginPath = "/student/login";
+                    config.Cookie.Name = "StudentMVC";
+                    config.LogoutPath = "/student/logout";
+                });
             services.AddAuthorization();
         }
 
@@ -60,7 +67,7 @@ namespace StudentMVCApp
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseSession();
+            //app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 

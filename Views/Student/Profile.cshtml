@@ -4,19 +4,19 @@
         FirstName:
     </dt>
     <dd class="col-sm-10">
-        @Context.Session.GetString("firstName")
+        @Context.Request.Cookies["FirstName"]
     </dd>
     <dt class="col-sm-2">
         LastName:
     </dt>
     <dd class="col-sm-10">
-        @Context.Session.GetString("lastName")
+        @Context.Request.Cookies["LastName"]
     </dd>
     <dt class="col-sm-2">
         Email:
     </dt>
     <dd class="col-sm-10">
-        @Context.Session.GetString("email")
+        @Context.Request.Cookies["Email"]
     </dd>
     <dt class="col-sm-2">
         Phone:
@@ -29,7 +29,7 @@
     </dt>
     <dd class="col-sm-10">
     </dd>
-    <dt class="col-sm-2">
+    @*<dt class="col-sm-2">
         Student Courses:
     </dt>
     @for (int i = 1; i <= int.Parse(Context.Session.GetString("numberOfCourses")); i++)
@@ -37,13 +37,13 @@
     <dd class="col-sm-10">
         @Context.Session.GetString($"course{i}")
     </dd>
-    }
+    }*@
     <dt class="col-sm-2">
         Student Photo:
     </dt>
     <dd class="col-sm-10">
-        <img class="card-img" style="height:200px; width:200px" src="~/StudentPhotos/@Context.Session.GetString("photo")" />
-        <a href="~/studentPhotos/@Context.Session.GetString("photo")" download="@Context.Session.GetString("photo")"><input class="btn btn-outline-primary" type="button" value="Download Photo" /></a>
+        <img class="card-img" style="height:200px; width:200px" src="~/StudentPhotos/@Context.Request.Cookies["photo"]" />
+        <a href="~/studentPhotos/@Context.Request.Cookies["photo"]" download="@Context.Request.Cookies["photo"]"><input class="btn btn-outline-primary" type="button" value="Download Photo" /></a>
     </dd>
 
 </dl>
